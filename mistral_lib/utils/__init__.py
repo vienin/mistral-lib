@@ -34,13 +34,20 @@ def cut_dict(d, length=100):
     idx = 0
 
     for key, value in d.items():
-        k = str(key)
-        v = str(value)
+        if isinstance(key, (str, unicode)):
+            k = key
+        else:
+            k = str(key)
+
+        if isinstance(value, (str, unicode)):
+            v = value
+        else:
+            v = str(value)
 
         # Processing key.
         new_len = len(res) + len(k)
 
-        is_str = isinstance(key, str)
+        is_str = isinstance(key, (str, unicode))
 
         if is_str:
             new_len += 2
@@ -56,7 +63,7 @@ def cut_dict(d, length=100):
         # Processing value.
         new_len = len(res) + len(v)
 
-        is_str = isinstance(value, str)
+        is_str = isinstance(value, (str, unicode))
 
         if is_str:
             new_len += 2
@@ -92,11 +99,14 @@ def cut_list(l, length=100):
     res = '['
 
     for idx, item in enumerate(l):
-        s = str(item)
+        if isinstance(item, (str, unicode)):
+            s = item
+        else:
+            s = str(item)
 
         new_len = len(res) + len(s)
 
-        is_str = isinstance(item, str)
+        is_str = isinstance(item, (str, unicode))
 
         if is_str:
             new_len += 2
@@ -141,7 +151,12 @@ def cut(data, length=100):
     if isinstance(data, dict):
         return cut_dict(data, length=length)
 
-    return cut_string(str(data), length=length)
+    if isinstance(data, (str, unicode)):
+        s = data
+    else:
+        s = str(data)
+
+    return cut_string(s, length=length)
 
 
 def mask_data(obj):
